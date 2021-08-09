@@ -1,0 +1,37 @@
+.answer-option {
+    border: 1px solid #E8E8E8;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    background: white;
+    box-shadow: 0px 0px 5px #E8E8E8;
+    justify-content: left;
+    text-align: center;
+    margin-right: 0.5em;
+    margin-top: 1em;
+    max-width: 300px;
+}
+
+.answer-option:last-child {
+    margin-right: 0px;
+}
+
+.answer-option label {
+    display: block;
+    color: #0097a7;
+    margin-bottom: 0.5em;
+}
+
+.answer-option input {
+    text-align: center;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    width: calc(100% - 0.5em);
+}
+
+.answer-option.correct {
+    background: green;
+}
+
+.answer-option.incorrect {
+    background: red;
+}

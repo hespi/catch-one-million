@@ -1,0 +1,51 @@
+.game-results {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.game-results .final-score {
+    border: 2px black dashed;
+    padding: 1em;
+    width: 800px;
+    height: 350px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-shadow: 2px 2px #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.game-results .final-score button {
+    padding: 0.5em;
+    background-color: #4285f4;
+    color: white;
+    border: 1px solid black;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.game-results .final-score.rank-awesome {
+    background-image: url('/src/assets/images/rank-awesome.gif');
+}
+
+.game-results .final-score.rank-high {
+    background-image: url('/src/assets/images/rank-high.gif');
+}
+
+.game-results .final-score.rank-normal {
+    background-image: url('/src/assets/images/rank-normal.gif');
+}
+
+.game-results .final-score.rank-low {
+    background-image: url('/src/assets/images/rank-low.gif');
+}

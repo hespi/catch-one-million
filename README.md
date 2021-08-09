@@ -1,46 +1,61 @@
-# Getting Started with Create React App
+# Catch One Million
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project has been created for the Checkout Area Gathering by:
+* Game development: Héctor Espí <hector.espi@edreamsodigeo.com>
+* Questions: Gonçalo Garrido <gonzalo.garrido@edreamsodigeo.com>
 
 ## Available Scripts
 
-In the project directory, you can run:
+In order to run the the game do the following
+
+### `npm install`
+
+This will download game dependencies.
 
 ### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Game screens
 
-### `npm test`
+The game is divided into 3 main screens:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Player Selection
 
-### `npm run build`
+You can add up to 8 players to each game. Although this doesn't have any effect on the game, as it is facilitated by only one person, this information is important to determine the final winners of the area gathering.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### Keyboard actions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Press '+' to add a user
+* Press '-' to remove a user
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Once you have filled the information of all game players, you must press 'ENTER' and confirm. Then the game will be started.
 
-### `npm run eject`
+### Game Questions
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This is the main game screen in which questions will be asked to the players, whose have 2 min (this can be configured) to set the amount of 'Primes' they want to bet in each answer. You can set as much as the money left shown in "Pending" score. It's is not necessary that you put money in every possible answer. Nonetheless, it's highly recommended to spend ALL your pending Primes into the different options to avoid loosing non played Primes when the timer reaches zero.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Once the question appears, the timer will be restarted, giving 2 min to answer each game question. It's up to the facilitator to pause the game if the team needs clarification, but don't count with that.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Everytime a question is solved, either by solving each answer independently or by solving the whole question showing all invalid and valid options, the score will be set to the amount played in the right answer, the rest will be lost. Then you can pass to the next question by pressing any key.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### Keyboard actions
 
-## Learn More
+It's important to click/focus on question board to have keyboard actions executed.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* Press 'p' to pause
+* Press 'd' to discover a random not valid answer
+* Press 's' to fully solve the question
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Game Results
+
+The game finishes when the team completes all the questions or when they reach zero in their score, meaning that they lost ALL the Primes.
+
+Then you will get redirected to the game results, were your final score and rank will be shown. The facilitator must download the game results to merge with the other teams, so that we can determine the winner of the area gathering game.
+
+## Configuration
+
+Game can be configured by properly filling the file 'assets/game-data.ts'. Simply set your questions and other configurations before starting the game, so it's compiled. 
+
+ENJOY! ;)

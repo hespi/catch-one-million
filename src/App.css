@@ -1,38 +1,47 @@
-.App {
+@import url('https://fonts.googleapis.com/css?family=Exo+2:wght@100;300&display=swap');
+@keyframes blinker {
+  from {opacity: 1.0;}
+  to {opacity: 0.0;}
+}
+.blink{
+	animation: blinker 1.2s infinite;
+}
+
+.catch-one-million::before {
+  content: ' ';
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  background-color: white;
+  background-image: url('./assets/images/money-case.jpg'); 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.4;
+}
+
+.catch-one-million {
+  font-family: 'Exo 2', sans-serif;
+}
+
+.catch-one-million .game-title {
+  position: absolute;
+  width: 100%;
+  top: 25%;
   text-align: center;
+  opacity: 0.6;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.catch-one-million h1 {
+  font-size: 8em;
+  color: #4285f4;
+  position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.catch-one-million h2 {
+  font-size: 6em;
+  color: #0097a7;
+  position: relative;
 }
