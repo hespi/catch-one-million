@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { createContext, useReducer } from 'react';
 import {
   Redirect,
   Route,
@@ -11,8 +11,11 @@ import GameResults from './pages/game-results/game-results';
 import Player from './classes/player';
 import GameReducer, { GameActionType } from './game-reducer';
 import {INITIAL_GAMEDATA} from './assets/game-data';
+import useSound from 'use-sound';
+import clockTickSound from './assets/audio/clock-tick.mp3';
 
 import './App.css';
+import Question from './classes/question';
 
 enum ROUTES {
   PLAYER_SELECTION = "/",
@@ -22,6 +25,10 @@ enum ROUTES {
 
 function App() {
   const [state, dispatch] = useReducer(GameReducer, INITIAL_GAMEDATA);
+  const GameContext = createContext(state);
+  
+  const [playTimerTick, {stop}] = useSound(clockTickSound);
+
   const history = useHistory();
 
   const playersAreSelected = (state.players && state.players.length > 0);
@@ -35,10 +42,13 @@ function App() {
     history.push(ROUTES.GAME_BOARD);
   };
 
-  const showResults = (score:number) => {
+  const showResults = (score:number, lastQuestionIx: number) => {
     dispatch({
       type: GameActionType.SET_SCORE,
-      data: score
+      data: {
+        score: score,
+        lastQuestion: lastQuestionIx
+      }
     });
 
     history.push(ROUTES.RESULTS);
@@ -46,10 +56,15 @@ function App() {
 
   const onPlayerSelection_Finished = (players:Player[]) => {
     startGame(players);
+    playTimerTick();
   };
 
-  const onGame_Finished = (finalScore:number) => {
-    showResults(finalScore);
+  const onGame_QuestionAnswered = (index:number, question:Question) => {
+    stop();
+  }
+
+  const onGame_QuestionsFinished = (score:number, lastQuestionIx:number) => {
+      showResults(score, lastQuestionIx);    
   }
 
   const onResults_Download = () => {
@@ -63,40 +78,43 @@ function App() {
   }
 
   return (
-    <div className="catch-one-million" data-testid="game-home">
-      <div className="game-title">
-        <h1>Catch one million</h1>
-        <h2>The Prime Game</h2>
+    <GameContext.Provider value={state}>
+      <div className="catch-one-million" data-testid="game-home">
+        <div className="game-title">
+          <h1>Catch one million</h1>
+          <h2>The Prime Game</h2>
+        </div>
+        <Switch>
+          <Route exact path={ROUTES.PLAYER_SELECTION}>
+            <PlayerSelection maxPlayers={8} onPlayerSelectionFinished={onPlayerSelection_Finished} />
+          </Route>
+          <Route exact path={ROUTES.GAME_BOARD}>
+            {!playersAreSelected 
+            ? <Redirect to={ROUTES.PLAYER_SELECTION} /> 
+            : <QuestionBoard 
+                initialScore={state.score} 
+                questionTimeInSeconds={state.questionTimeInSeconds} 
+                players={state.players} 
+                questions={state.questions}
+                onAllQuestionsAnswered={onGame_QuestionsFinished}
+                onQuestionAnswered={onGame_QuestionAnswered}
+              /> 
+            }
+          </Route>
+          <Route exact path={ROUTES.RESULTS}>
+            { !playersAreSelected 
+            ? <Redirect to={ROUTES.PLAYER_SELECTION} />
+            : <GameResults
+                maxScore={INITIAL_GAMEDATA.score}
+                score={state.score}
+                onResultsDownload={onResults_Download}
+              />
+            }
+          </Route>
+        </Switch>
+        <a id="downloadGameData" style={{display: 'none'}}></a>
       </div>
-      <Switch>
-        <Route exact path={ROUTES.PLAYER_SELECTION}>
-          <PlayerSelection maxPlayers={8} onPlayerSelectionFinished={onPlayerSelection_Finished} />
-        </Route>
-        <Route exact path={ROUTES.GAME_BOARD}>
-          {!playersAreSelected 
-          ? <Redirect to={ROUTES.PLAYER_SELECTION} /> 
-          : <QuestionBoard 
-              initialScore={state.score} 
-              questionTimeInSeconds={state.questionTimeInSeconds} 
-              players={state.players} 
-              questions={state.questions}
-              onQuestionsAnswered={onGame_Finished}
-            /> 
-          }
-        </Route>
-        <Route exact path={ROUTES.RESULTS}>
-          { state.score === undefined 
-          ? <Redirect to={ROUTES.GAME_BOARD} />
-          : <GameResults
-              maxScore={INITIAL_GAMEDATA.score}
-              score={state.score}
-              onResultsDownload={onResults_Download}
-            />
-          }
-        </Route>
-      </Switch>
-      <a id="downloadGameData" style={{display: 'none'}}></a>
-    </div>
+    </GameContext.Provider>
   );
 }
 

@@ -1,6 +1,9 @@
 import React, { useState, useEffect, createRef } from 'react';
 import Player from '../../classes/player';
 import PlayerInput from '../../components/player-input/player-input';
+import useSound from 'use-sound';
+import coinSound from '../../assets/audio/coin-sound.mp3';
+import trashSound from '../../assets/audio/trash.mp3';
 import './player-selection.css';
 
 type PlayerSelectionProps = {
@@ -11,6 +14,8 @@ type PlayerSelectionProps = {
 
 const PlayerSelection = (props: PlayerSelectionProps) => {
   const [players, setPlayers] = useState(props.initialPlayers === undefined ? [] : props.initialPlayers);
+  const [playCoinSound] = useSound(coinSound);
+  const [playTrashSound] = useSound(trashSound)
   var componentRef = createRef<HTMLDivElement>();
 
   useEffect(() => {
@@ -20,6 +25,7 @@ const PlayerSelection = (props: PlayerSelectionProps) => {
   const tryAddNewPlayer = () => {
     if (players.length < props.maxPlayers) {
       addNewPlayer([...players]);
+      playCoinSound();
     }
   };
 
@@ -31,6 +37,7 @@ const PlayerSelection = (props: PlayerSelectionProps) => {
   const tryRemoveLastPlayer = () => {
     if (players.length > 0) {
       removeLastPlayer([...players]);
+      playTrashSound();
     }
   };
 
@@ -69,7 +76,7 @@ const PlayerSelection = (props: PlayerSelectionProps) => {
         Press ENTER to start playing
       </div>
       {
-        players?.map((player, ix) => <PlayerInput className={"player-" + (ix + 1)} key={player.id} onChange={onPlayer_Changed}/>)
+        players?.map((player, ix) => <PlayerInput className={"player-" + (ix + 1)} key={player.id} player={player} onChange={onPlayer_Changed}/>)
       }
     </div>
   )

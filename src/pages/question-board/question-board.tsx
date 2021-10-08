@@ -2,6 +2,10 @@ import React, { useState, useEffect, createRef } from 'react';
 import Player from '../../classes/player';
 import Question from '../../classes/question';
 import AnswerOption from '../../components/answer-option/answer-option';
+import useSound from 'use-sound';
+import badOptionSound from '../../assets/audio/loose.mp3';
+import goodOptionSound from '../../assets/audio/win.mp3';
+import clockTickSound from '../../assets/audio/clock-tick.mp3';
 import './question-board.css';
 
 type QuestionBoardProps = {
@@ -9,7 +13,9 @@ type QuestionBoardProps = {
     questionTimeInSeconds: number;
     players: Player[];
     questions: Question[];
-    onQuestionsAnswered(score:number):void;
+    onAllQuestionsAnswered(score:number, lastQuestionIx:number):void;
+    onQuestionAnswered(index: number, question:Question):void;
+
 }
 
 const QuestionBoard = (props: QuestionBoardProps) => {
@@ -21,9 +27,12 @@ const QuestionBoard = (props: QuestionBoardProps) => {
   const [isPaused, setIsPaused] = useState(false);
   const [optionsDiscovered, setOptionsDiscovered] = useState("");
   const [isQuestionSolved, setIsQuestionSolved] = useState(false);
+  const [playFailedOption] = useSound(badOptionSound);
+  const [playSolutionOption] = useSound(goodOptionSound);
+  const [playTimerTick, {stop}] = useSound(clockTickSound);
+  const stopTimerTick = stop;
   var componentRef = createRef<HTMLDivElement>();
   var currentQuestion:Question = props.questions[currentQuestionIx - 1];
-  
   useEffect(() => {
     if (pendingTimeInSeconds === 0) {
       onTimer_Finished();
@@ -35,6 +44,8 @@ const QuestionBoard = (props: QuestionBoardProps) => {
 
   useEffect(() =>{
     currentQuestion = props.questions[currentQuestionIx - 1];
+    stopTimerTick();
+    playTimerTick();
   }, [currentQuestionIx]);
 
   const tickTimer = () => {
@@ -47,6 +58,13 @@ const QuestionBoard = (props: QuestionBoardProps) => {
     setOptionsDiscovered("," + currentQuestion.options.map((opt:string, ix:number) => ix).join(','));
     setIsQuestionSolved(true);
     setScore(rightAnswerAmount);
+    stopTimerTick();
+    props.onQuestionAnswered(currentQuestionIx, currentQuestion);
+    if (rightAnswerAmount > 0) {
+      playSolutionOption();
+    } else {
+      playFailedOption();
+    }
   }
 
   const moveToNextQuestion = () => {
@@ -57,8 +75,9 @@ const QuestionBoard = (props: QuestionBoardProps) => {
       setPendingAmount(score);
       setCurrentQuestionIx(currentQuestionIx + 1);
       setPendingTimeInSeconds(props.questionTimeInSeconds);
+      setRightAnswerAmount(0);
     } else {
-      props.onQuestionsAnswered(score);
+      props.onAllQuestionsAnswered(score, currentQuestionIx);
     }
   };
 
@@ -72,8 +91,9 @@ const QuestionBoard = (props: QuestionBoardProps) => {
   const discoverRandomNonAnswerOption = ():number => {
     let undiscoveredNonAnswerOptions = getUndiscoveredNonAnswerOptions();
     if(undiscoveredNonAnswerOptions.length > 1) {
-      var optionToDiscover = getRandomInt(0, undiscoveredNonAnswerOptions.length);
+      var optionToDiscover = getRandomInt(0, undiscoveredNonAnswerOptions.length - 1);
       setOptionsDiscovered(optionsDiscovered + ',' + undiscoveredNonAnswerOptions[optionToDiscover]);
+      playFailedOption();
       return undiscoveredNonAnswerOptions.length - 1;
     } else {
       solveQuestion();
@@ -103,6 +123,12 @@ const QuestionBoard = (props: QuestionBoardProps) => {
       moveToNextQuestion();
     } else if (key === 'p') {
       setIsPaused(!isPaused);
+      if (!isPaused) {
+        stopTimerTick();
+      } else {
+        playTimerTick();
+      }
+      
     } else if (key === 'd') {
       discoverRandomNonAnswerOption();
     } else if (key === 's') {

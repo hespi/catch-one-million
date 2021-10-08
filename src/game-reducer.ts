@@ -20,7 +20,8 @@ export default function GameReducer(state:Game, action:GameAction) {
             case GameActionType.SET_SCORE:
                 return {
                     ...state,
-                    score: action.data
+                    score: action.data.score,
+                    lastQuestion: action.data.lastQuestion
                 }
         default:
             return state;
