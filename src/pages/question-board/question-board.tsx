@@ -1,7 +1,8 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect, createRef, useRef } from 'react';
 import Player from '../../classes/player';
 import Question from '../../classes/question';
 import AnswerOption from '../../components/answer-option/answer-option';
+import Timer, {TimerHandle} from '../../components/timer/timer';
 import useSound from 'use-sound';
 import badOptionSound from '../../assets/audio/loose.mp3';
 import goodOptionSound from '../../assets/audio/win.mp3';
@@ -23,42 +24,24 @@ const QuestionBoard = (props: QuestionBoardProps) => {
   const [pendingAmount, setPendingAmount] = useState(props.initialScore);
   const [rightAnswerAmount, setRightAnswerAmount] = useState(0);
   const [currentQuestionIx, setCurrentQuestionIx] = useState(1);
-  const [pendingTimeInSeconds, setPendingTimeInSeconds] = useState(props.questionTimeInSeconds);
   const [isPaused, setIsPaused] = useState(false);
   const [optionsDiscovered, setOptionsDiscovered] = useState("");
   const [isQuestionSolved, setIsQuestionSolved] = useState(false);
   const [playFailedOption] = useSound(badOptionSound);
   const [playSolutionOption] = useSound(goodOptionSound);
-  const [playTimerTick, {stop}] = useSound(clockTickSound);
-  const stopTimerTick = stop;
+  const timerRef = useRef<TimerHandle>(null);
   var componentRef = createRef<HTMLDivElement>();
   var currentQuestion:Question = props.questions[currentQuestionIx - 1];
-  useEffect(() => {
-    if (pendingTimeInSeconds === 0) {
-      onTimer_Finished();
-    } else if (!isPaused) {
-      const timer = tickTimer();
-      return () => clearTimeout(timer);
-    }
-  });
-
+  
   useEffect(() =>{
     currentQuestion = props.questions[currentQuestionIx - 1];
-    stopTimerTick();
-    playTimerTick();
   }, [currentQuestionIx]);
-
-  const tickTimer = () => {
-    return setTimeout(() => {
-      setPendingTimeInSeconds(pendingTimeInSeconds - 1);
-    }, 1000);
-  }
 
   const solveQuestion = () => {
     setOptionsDiscovered("," + currentQuestion.options.map((opt:string, ix:number) => ix).join(','));
     setIsQuestionSolved(true);
     setScore(rightAnswerAmount);
-    stopTimerTick();
+    setIsPaused(true);
     props.onQuestionAnswered(currentQuestionIx, currentQuestion);
     if (rightAnswerAmount > 0) {
       playSolutionOption();
@@ -74,19 +57,12 @@ const QuestionBoard = (props: QuestionBoardProps) => {
       setOptionsDiscovered("");
       setPendingAmount(score);
       setCurrentQuestionIx(currentQuestionIx + 1);
-      setPendingTimeInSeconds(props.questionTimeInSeconds);
+      timerRef.current?.reset();
       setRightAnswerAmount(0);
     } else {
       props.onAllQuestionsAnswered(score, currentQuestionIx);
     }
-  };
-
-  const formatSecondsToMinutesAndSeconds = (seconds: number) => {
-    const twoDigitFormatOptions = {minimumIntegerDigits: 2, useGrouping:false};
-    let minutes = Math.floor(seconds / 60);
-    let leftSeconds = seconds % 60;
-    return `${minutes.toLocaleString('en-US', twoDigitFormatOptions)}:${leftSeconds.toLocaleString('en-US', twoDigitFormatOptions)}`;
-  };
+  }; 
 
   const discoverRandomNonAnswerOption = ():number => {
     let undiscoveredNonAnswerOptions = getUndiscoveredNonAnswerOptions();
@@ -118,17 +94,16 @@ const QuestionBoard = (props: QuestionBoardProps) => {
       return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  const getAnswerOptionLabel = (optionIx:number) => {
+    const labels:string = "abcdefghijklmnopqrstuvwxyz";
+    return labels.charAt(optionIx);
+  }
+
   const onKey_Pressed = (key:string, altKeyPressed: boolean) => {
     if (isQuestionSolved) {
       moveToNextQuestion();
     } else if (key === 'p') {
       setIsPaused(!isPaused);
-      if (!isPaused) {
-        stopTimerTick();
-      } else {
-        playTimerTick();
-      }
-      
     } else if (key === 'd') {
       discoverRandomNonAnswerOption();
     } else if (key === 's') {
@@ -168,7 +143,13 @@ const QuestionBoard = (props: QuestionBoardProps) => {
         </div>
         <div className="timer">
           <label>TIME</label>
-          <span>{formatSecondsToMinutesAndSeconds(pendingTimeInSeconds)}</span>
+          <Timer 
+            ref={timerRef}
+            onFinished={onTimer_Finished}
+            seconds={props.questionTimeInSeconds}
+            isPaused={isPaused}
+            tickSound={clockTickSound}
+          />
         </div>
       </div>
       <div className="game-container">
@@ -181,6 +162,7 @@ const QuestionBoard = (props: QuestionBoardProps) => {
             currentQuestion.options.map((sentence:string, ix: number) => 
               <AnswerOption 
                 key={currentQuestion.id + '_' + ix} 
+                label={getAnswerOptionLabel(ix)}
                 text={sentence}
                 amountStep={10000}
                 isRightAnswer={(ix + 1) === currentQuestion.answerIx}

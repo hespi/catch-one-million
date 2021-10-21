@@ -6,6 +6,8 @@ export default class Game {
 
     score:number = 0;
 
+    lastAnsweredQuestion:number = 0;
+
     questionTimeInSeconds:number = 120;
 
     questions:Question[] = [];

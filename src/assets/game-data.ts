@@ -3,10 +3,12 @@ import Game from '../classes/game';
 export const INITIAL_GAMEDATA:Game = {
     "players": [],
     "score": 1000000,
+    "lastAnsweredQuestion": 0,
     "questionTimeInSeconds": 90,
     "questions": [
         {
             "id": 1,
+            "disabled": false,
             "question": "What year was eDreams founded?",
             "presenter": "Dana",
             "options": [
@@ -20,6 +22,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 2,
+            "disabled": false,
             "question": "Which of the following countries is not an eDO core market?",
             "presenter": "David",
             "options": [
@@ -33,6 +36,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 3,
+            "disabled": false,
             "question": "How many websites and apps do we have in total, approximately?",
             "presenter": "Guerrit",
             "options": [
@@ -46,6 +50,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 4,
+            "disabled": false,
             "question": "Which of the following is not a eDO brand?",
             "presenter": "Dana",
             "options": [
@@ -59,6 +64,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 5,
+            "disabled": false,
             "question": "What year was eDO IPO (“started trading in stock market”)?",
             "presenter": "David",
             "options": [
@@ -72,6 +78,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 6,
+            "disabled": true,
             "question": "What percentage of bookings do we sell via mobile (2021)?",
             "presenter": "Guerrit",
             "options": [
@@ -85,6 +92,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 7,
+            "disabled": true,
             "question": "How many customers do we annualy serve (pre-covid)?",
             "presenter": "Dana",
             "options": [
@@ -98,6 +106,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 8,
+            "disabled": true,
             "question": "What world flight retailer position do we currently have (2021)?",
             "presenter": "David",
             "options": [
@@ -111,6 +120,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 9,
+            "disabled": false,
             "question": "Which of the following is not a eDO product developmet area?",
             "presenter": "Guerrit",
             "options": [
@@ -124,6 +134,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 10,
+            "disabled": false,
             "question": "Which year do we expect to achieve 2 Million Prime members?",
             "presenter": "Dana",
             "options": [
@@ -137,6 +148,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 11,
+            "disabled": false,
             "question": "Which was not a inniciative of Connectivity area in fy21?",
             "presenter": "David",
             "options": [
@@ -150,6 +162,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 12,
+            "disabled": false,
             "question": "Which digital resolution is not a new FY22 TravelShop support goal?",
             "presenter": "Guerrit",
             "options": [
@@ -163,6 +176,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 13,
+            "disabled": false,
             "question": "Which is not a fy22 key result (portfolio) for checkout area?",
             "presenter": "Dana",
             "options": [
@@ -176,6 +190,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 14,
+            "disabled": false,
             "question": "Which is not a current Convert strategic goal (fy22)?",
             "presenter": "David",
             "options": [
@@ -189,6 +204,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 15,
+            "disabled": false,
             "question": "Which is not a corenpm building block from Native area?",
             "presenter": "Guerrit",
             "options": [
@@ -202,6 +218,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 16,
+            "disabled": false,
             "question": "Which POD is not part of Dynpack area?",
             "presenter": "Dana",
             "options": [
@@ -215,6 +232,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 17,
+            "disabled": false,
             "question": "Which is not a current eDo Care Force area goal (fy22)?",
             "presenter": "David",
             "options": [
@@ -228,6 +246,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 18,
+            "disabled": false,
             "question": "Which of the following is/are part of core eDO value(s)?",
             "presenter": "Guerrit",
             "options": [
@@ -241,6 +260,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 19,
+            "disabled": false,
             "question": "Why is data quality important for eDO?",
             "presenter": "Dana",
             "options": [
@@ -254,6 +274,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 20,
+            "disabled": false,
             "question": "Which is the main validation a booking needs to check in order to invoice?",
             "presenter": "David",
             "options": [
@@ -267,6 +288,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 21,
+            "disabled": true,
             "question": "Which of the following products was never offered on eDO platforms?",
             "presenter": "Guerrit",
             "options": [
@@ -280,6 +302,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 22,
+            "disabled": true,
             "question": "In what 2021 month did we achieve pre pandemic (2019) number of bookings sold?",
             "presenter": "Dana",
             "options": [
@@ -293,6 +316,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 23,
+            "disabled": true,
             "question": "How do you calculate the total booking merchant amount?",
             "presenter": "David",
             "options": [
@@ -306,6 +330,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 24,
+            "disabled": true,
             "question": "Which of the following companies did not need to issue new debt during 2020 covid crisis?",
             "presenter": "Guerrit",
             "options": [
@@ -319,6 +344,7 @@ export const INITIAL_GAMEDATA:Game = {
         },
         {
             "id": 25,
+            "disabled": false,
             "question": "Why is eDO a stonger company after 2020 covid crisis?",
             "presenter": "Dana",
             "options": [

@@ -61,6 +61,7 @@
     font-size: 2em;
     text-align: center;
     color: #4285f4;
+    margin-bottom: 20px;
 }
 
 .question-board .game-container .game-screen .answer-options {

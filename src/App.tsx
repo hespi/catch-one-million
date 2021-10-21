@@ -95,7 +95,7 @@ function App() {
                 initialScore={state.score} 
                 questionTimeInSeconds={state.questionTimeInSeconds} 
                 players={state.players} 
-                questions={state.questions}
+                questions={state.questions.filter((q) => !q.disabled)}
                 onAllQuestionsAnswered={onGame_QuestionsFinished}
                 onQuestionAnswered={onGame_QuestionAnswered}
               /> 

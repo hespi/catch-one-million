@@ -21,7 +21,7 @@ export default function GameReducer(state:Game, action:GameAction) {
                 return {
                     ...state,
                     score: action.data.score,
-                    lastQuestion: action.data.lastQuestion
+                    lastAnsweredQuestion: action.data.lastQuestion
                 }
         default:
             return state;

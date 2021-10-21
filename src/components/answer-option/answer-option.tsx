@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import './answer-option.css';
 
 type AnswerOptionProps = {
+    label: string;
     text: string;
     isRightAnswer: boolean;
     isRevealed?: boolean;
@@ -30,6 +31,7 @@ const AnswerOption = (props: AnswerOptionProps) => {
 
   return (
     <div className={"answer-option " + answerRevealClass}>
+      <div className='option-label'>{props.label}</div>
       <label>{props.text}</label>
       <input 
         type="number"
